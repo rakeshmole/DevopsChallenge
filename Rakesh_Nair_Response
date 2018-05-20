@@ -1,0 +1,48 @@
+Q1: You have been given 1000 nodes to bootstrap, install hadoop/elasticsearch/cassandra (whatever distributed software you're familiar with) and test/check. assume all 1000 nodes have been 
+
+wired etc. How would you go about it?
+Most probably i will be using be a deployment script line ansible , puppet to distribute the software, in my  current organization i use ansible deployment to install cloudera/HDP , ES , 
+
+Zoomdata, and tomcat 
+
+
+
+Q2: How would you go about installing OS on these nodes ? How much time would it take ? (what if we had 10000 nodes)
+I will use kickstart+PXE unattended to install OS on these nodes, 1000 or 10000 it does not matter as they will be installed in  parallalel
+
+Q3: How would you implement a system that distributes a file to 1000 nodes ? (Any changes if 10000 nodes ?)
+I can use a bash script ( like a for script to read from a file ) and the file to be distributed can be placed on a file share or you can put the copy command in the script itself , if it 
+
+is 10000 nodes it wil take longer here  or you can use another approach if this is going to be a an on going process then you can place files on a file share and have a cron processs 
+
+starting up every X minutes looking for new files.
+
+
+
+Q4: How would you prevent unauthorized access to the cluster resources ? (Assume cluster service does not have intrinsic authentication / authorization built in)
+you can use kerberos ( MIT or AD ) or Sentry or Ranger to set up authorizations
+
+Q5: You have configured Namenode HA. One day when the active NN down, you notice standby NN did not take over. What may cause it? How would you investigate what has happened? If you see 
+
+both NN are in standby mode, how to fix it?
+Check if zookeeper is healthy 
+check if all name node host name resolution is working properly
+check if all the keystore permissions are correct
+Check if all journal nodes are up and running
+Any issue in election process 
+
+
+
+
+
+
+Q6: You have turned on SQL Standard-Based Authorization for Hive. user 'joe' is allowed to run select on table 'audit'; meanwhile, user 'joe' has no access permission to the HDFS folder 
+
+holding the data for table 'audit'. If Joe execute "select * from audit", what he will get?
+The user may get a java io exception error
+
+
+Q7: You have configured capacity scheduler queues for you Yarn cluster. One day you found one queue resource is fully occupied by a huge job launched by user 'joe' while lots of other 
+
+users' jobs are pending. How do you prevent it happening?
+Use capcity scheduler value of minimum user limit and user-limit-factor to controll the resources.
